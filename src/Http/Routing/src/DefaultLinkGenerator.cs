@@ -20,7 +20,6 @@ namespace Microsoft.AspNetCore.Routing
 {
     internal sealed class DefaultLinkGenerator : LinkGenerator, IDisposable
     {
-        private readonly ParameterPolicyFactory _parameterPolicyFactory;
         private readonly TemplateBinderFactory _binderFactory;
         private readonly ILogger<DefaultLinkGenerator> _logger;
         private readonly IServiceProvider _serviceProvider;
@@ -36,14 +35,12 @@ namespace Microsoft.AspNetCore.Routing
         private readonly Func<RouteEndpoint, TemplateBinder> _createTemplateBinder;
 
         public DefaultLinkGenerator(
-            ParameterPolicyFactory parameterPolicyFactory,
             TemplateBinderFactory binderFactory,
             EndpointDataSource dataSource,
             IOptions<RouteOptions> routeOptions,
             ILogger<DefaultLinkGenerator> logger,
             IServiceProvider serviceProvider)
         {
-            _parameterPolicyFactory = parameterPolicyFactory;
             _binderFactory = binderFactory;
             _logger = logger;
             _serviceProvider = serviceProvider;

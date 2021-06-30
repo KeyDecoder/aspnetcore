@@ -7,16 +7,15 @@ using System.IO.Pipelines;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http.Features;
-using Microsoft.Net.Http.Headers;
 
 namespace Microsoft.AspNetCore.Http
 {
     internal sealed class DefaultHttpResponse : HttpResponse
     {
         // Lambdas hoisted to static readonly fields to improve inlining https://github.com/dotnet/roslyn/issues/13624
-        private readonly static Func<IFeatureCollection, IHttpResponseFeature?> _nullResponseFeature = f => null;
-        private readonly static Func<IFeatureCollection, IHttpResponseBodyFeature?> _nullResponseBodyFeature = f => null;
-        private readonly static Func<IFeatureCollection, IResponseCookiesFeature?> _newResponseCookiesFeature = f => new ResponseCookiesFeature(f);
+        private static readonly Func<IFeatureCollection, IHttpResponseFeature?> _nullResponseFeature = f => null;
+        private static readonly Func<IFeatureCollection, IHttpResponseBodyFeature?> _nullResponseBodyFeature = f => null;
+        private static readonly Func<IFeatureCollection, IResponseCookiesFeature?> _newResponseCookiesFeature = f => new ResponseCookiesFeature(f);
 
         private readonly DefaultHttpContext _context;
         private FeatureReferences<FeatureInterfaces> _features;
@@ -73,7 +72,7 @@ namespace Microsoft.AspNetCore.Http
 
                 if (otherFeature is StreamResponseBodyFeature streamFeature
                     && streamFeature.PriorFeature != null
-                    && object.ReferenceEquals(value, streamFeature.PriorFeature.Stream))
+                    && ReferenceEquals(value, streamFeature.PriorFeature.Stream))
                 {
                     // They're reverting the stream back to the prior one. Revert the whole feature.
                     _features.Collection.Set(streamFeature.PriorFeature);

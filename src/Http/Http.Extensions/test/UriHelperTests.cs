@@ -128,19 +128,18 @@ namespace Microsoft.AspNetCore.Http.Extensions
         [InlineData("http://[1080:0:0:0:8:800:200C:417A]/index.html", "http", "[1080:0:0:0:8:800:200C:417A]", "/index.html", "", "")]
         [InlineData("http://example.com///", "http", "example.com", "///", "", "")]
         public void FromAbsoluteUriParsingChecks(
-            string uri, 
-            string expectedScheme, 
-            string expectedHost, 
-            string expectedPath, 
-            string expectedQuery, 
+            string uri,
+            string expectedScheme,
+            string expectedHost,
+            string expectedPath,
+            string expectedQuery,
             string expectedFragment)
         {
-            string scheme = null;
-            var host = new HostString();
-            var path = new PathString();
-            var query = new QueryString();
-            var fragment = new FragmentString();
-            UriHelper.FromAbsolute(uri, out scheme, out host, out path, out query, out fragment);
+            _ = new HostString();
+            _ = new PathString();
+            _ = new QueryString();
+            _ = new FragmentString();
+            UriHelper.FromAbsolute(uri, out var scheme, out var host, out var path, out var query, out var fragment);
 
             Assert.Equal(scheme, expectedScheme);
             Assert.Equal(host, new HostString(expectedHost));
@@ -157,14 +156,8 @@ namespace Microsoft.AspNetCore.Http.Extensions
             var path = new PathString("/index.html");
             var query = new QueryString("?foo=1");
             var fragment = new FragmentString("#col=1");
-            var request = UriHelper.BuildAbsolute(scheme, host, path:path, query:query, fragment:fragment);
-
-            string resScheme = null;
-            var resHost = new HostString();
-            var resPath = new PathString();
-            var resQuery = new QueryString();
-            var resFragment = new FragmentString();
-            UriHelper.FromAbsolute(request, out resScheme, out resHost, out resPath, out resQuery, out resFragment);
+            var request = UriHelper.BuildAbsolute(scheme, host, path: path, query: query, fragment: fragment);
+            UriHelper.FromAbsolute(request, out var resScheme, out var resHost, out var resPath, out var resQuery, out var resFragment);
 
             Assert.Equal(scheme, resScheme);
             Assert.Equal(host, resHost);
@@ -180,8 +173,7 @@ namespace Microsoft.AspNetCore.Http.Extensions
             var resPath = new PathString();
             var resQuery = new QueryString();
             var resFragment = new FragmentString();
-            Assert.Throws<ArgumentNullException>(() => UriHelper.BuildAbsolute(null, resHost,  resPath, resPath,  resQuery,  resFragment));
-
+            Assert.Throws<ArgumentNullException>(() => UriHelper.BuildAbsolute(null, resHost, resPath, resPath, resQuery, resFragment));
         }
 
         [Fact]
@@ -193,7 +185,6 @@ namespace Microsoft.AspNetCore.Http.Extensions
             var resQuery = new QueryString();
             var resFragment = new FragmentString();
             Assert.Throws<ArgumentNullException>(() => UriHelper.FromAbsolute(null, out resScheme, out resHost, out resPath, out resQuery, out resFragment));
-
         }
     }
 }

@@ -441,12 +441,12 @@ namespace Microsoft.AspNetCore.WebUtilities
             async Task CopyToAsyncImpl()
             {
                 // At least a 4K buffer
-                byte[] buffer = _bytePool.Rent(bufferSize);
+                var buffer = _bytePool.Rent(bufferSize);
                 try
                 {
                     while (true)
                     {
-                        int bytesRead = await ReadAsync(buffer, cancellationToken);
+                        var bytesRead = await ReadAsync(buffer, cancellationToken);
                         if (bytesRead == 0)
                         {
                             break;
@@ -482,7 +482,7 @@ namespace Microsoft.AspNetCore.WebUtilities
         }
 
         /// <inheritdoc/>
-        public async override ValueTask DisposeAsync()
+        public override async ValueTask DisposeAsync()
         {
             if (!_disposed)
             {
